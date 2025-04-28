@@ -11,13 +11,25 @@ export function CartProvider({ children }) {
   const [totalItems, setTotalItems] = useState(cart.reduce((total, item) => total + item.quantity, 0));
 
   const addToCart = (product) => {
+    const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+    
+    if (totalQuantity >= 10) {
+      alert('В кошику не може бути більше 10 товарів!');
+      return; // Не додаємо товар, якщо кількість більше 10
+    }
+  
     const existingProduct = cart.find(item => item.id === product.id);
     if (existingProduct) {
       updateQuantity(product.id, existingProduct.quantity + 1);
     } else {
       setCart([...cart, { ...product, quantity: 1 }]);
     }
+  
+    // Оновлюємо загальну кількість товарів у кошику після додавання
+    setTotalItems(cart.reduce((total, item) => total + item.quantity, 0));
   };
+  
+  
 
   const updateQuantity = (id, quantity) => {
     if (quantity <= 10) {
