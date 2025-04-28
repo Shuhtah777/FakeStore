@@ -29,7 +29,6 @@ export function CartProvider({ children }) {
     setTotalItems(cart.reduce((total, item) => total + item.quantity, 0));
   };
   
-  
 
   const updateQuantity = (id, quantity) => {
     if (quantity <= 10) {
