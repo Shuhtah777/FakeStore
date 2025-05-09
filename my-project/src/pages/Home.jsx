@@ -6,7 +6,7 @@ import ProductCard from '../components/ProductCard';
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
 
   useEffect(() => {

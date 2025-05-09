@@ -87,6 +87,10 @@ main {
   margin-bottom: 15px;
 }
 
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
 .cart-item img {
   width: 50px;
   height: 50px;
