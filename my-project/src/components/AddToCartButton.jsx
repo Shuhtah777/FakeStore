@@ -1,3 +1,4 @@
+// src/components/AddToCartButton.jsx (updated)
 import { useCart } from "../context/CartContext";
 import { useState } from "react";
 
@@ -6,7 +7,10 @@ export default function AddToCartButton({ product }) {
   const [quantity, setQuantity] = useState(1);
 
   const handleAdd = () => {
-    addToCart(product, quantity);
+    const success = addToCart(product, quantity);
+    if (success) {
+      setQuantity(1); // Reset quantity after successful add
+    }
   };
 
   return (
@@ -16,7 +20,10 @@ export default function AddToCartButton({ product }) {
         min="1"
         max="10"
         value={quantity}
-        onChange={(e) => setQuantity(Number(e.target.value))}
+        onChange={(e) => {
+          const value = Math.min(Math.max(1, Number(e.target.value)), 10);
+          setQuantity(value);
+        }}
         style={{ width: '50px', marginRight: '1rem' }}
       />
       <button onClick={handleAdd}>

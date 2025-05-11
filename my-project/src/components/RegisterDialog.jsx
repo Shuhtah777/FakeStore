@@ -1,4 +1,3 @@
-// components/RegisterDialog.jsx
 import { forwardRef, useRef } from "react";
 
 const RegisterDialog = forwardRef(({ onRegister }, ref) => {

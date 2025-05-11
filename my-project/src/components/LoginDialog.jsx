@@ -1,4 +1,3 @@
-// components/LoginDialog.jsx
 import { forwardRef, useRef } from "react";
 
 const LoginDialog = forwardRef(({ onLogin }, ref) => {

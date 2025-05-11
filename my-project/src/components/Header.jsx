@@ -1,25 +1,36 @@
+// src/components/Header.jsx
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 export default function Header() {
   const navigate = useNavigate();
   const [user, setUser] = useState(localStorage.getItem("user"));
-  const [cartCount, setCartCount] = useState(0);
+  const { totalItems } = useCart();
 
   useEffect(() => {
-    if (user) {
-      const cartKey = `cart_${user}`;
-      const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
-      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-      setCartCount(totalItems);
-    }
-  }, [user]);
+    const handleStorageChange = () => {
+      setUser(localStorage.getItem("user"));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    // Очищаємо кошик при виході
+    localStorage.removeItem(`cart_${user}`);
     setUser(null);
     navigate("/");
+    // Примусово оновлюємо сторінку
+    window.location.reload();
+  };
+
+  const showAuthDialog = () => {
+    const event = new CustomEvent('showAuthDialog');
+    window.dispatchEvent(event);
   };
 
   return (
@@ -33,11 +44,11 @@ export default function Header() {
             <button onClick={logout} style={styles.button}>Вийти</button>
             <Link to="/cart" style={styles.cart}>
               🛍️
-              {cartCount > 0 && <span style={styles.badge}>{cartCount}</span>}
+              {totalItems > 0 && <span style={styles.badge}>{totalItems}</span>}
             </Link>
           </>
         ) : (
-          <button onClick={() => navigate("/")} style={styles.button}>
+          <button onClick={showAuthDialog} style={styles.button}>
             Увійти
           </button>
         )}
@@ -46,6 +57,7 @@ export default function Header() {
   );
 }
 
+// ... (стилі залишаються незмінними)
 const styles = {
   header: {
     display: "flex",
